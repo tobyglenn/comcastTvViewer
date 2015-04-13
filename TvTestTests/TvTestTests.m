@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import "MasterViewController.h"
 
 @interface TvTestTests : XCTestCase
+
+@property (nonatomic, strong) MasterViewController *vc;
 
 @end
 
@@ -17,7 +20,9 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    self.vc = [storyboard instantiateViewControllerWithIdentifier:@"MasterViewController"];
+    [self.vc performSelectorOnMainThread:@selector(loadView) withObject:nil waitUntilDone:YES];
 }
 
 - (void)tearDown {
@@ -25,16 +30,15 @@
     [super tearDown];
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
+-(void)testThatViewLoads
+{
+    XCTAssertNotNil(self.vc.view, @"View not initiated properly");
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+-(void)testThatTableViewLoads
+{
+    XCTAssertNotNil(self.vc.tableView, @"TableView not initiated");
 }
+
 
 @end

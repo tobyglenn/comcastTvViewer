@@ -33,7 +33,9 @@
     if (self.detailItem) {
         self.detailDescriptionLabel.text = [self.detailItem valueForKey:@"videoDescription"];
         [self.videoImage setImageWithURL:[NSURL URLWithString:[self.detailItem valueForKeyPath:@"image.src"]]];
-        //[self.brandLogo setI
+        [self.videoImage setAccessibilityLabel:[self.detailItem valueForKeyPath:@"image.alt"]];
+    }else {
+        self.detailDescriptionLabel.text = @"please select a listing to view the full content";
     }
 }
 

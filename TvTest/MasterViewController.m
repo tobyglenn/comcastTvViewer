@@ -9,9 +9,13 @@
 #import "MasterViewController.h"
 #import "DetailViewController.h"
 #import <AFNetworking/AFHTTPRequestOperation.h>
+#import "TVSummaryCell.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
 
 @interface MasterViewController ()
+@property NSMutableArray *allData;
 @property NSMutableArray *tvListings;
+-(void)setTVListingsData:(int)index;
 @end
 
 @implementation MasterViewController
@@ -25,54 +29,39 @@
     NSURL *url = [NSURL URLWithString:@"http://xfinitytv.comcast.net/api/xfinity/ipad/home/videos?filter&type=json"];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
-    // 2
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     operation.responseSerializer = [AFJSONResponseSerializer serializer];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
-        
-        // 3
-        self.tvListings = [[responseObject objectForKey:@"videoGalleries"][0] objectForKey:@"items"];
-        self.title = @"TV Listings";
-        [self.tableView reloadData];
-        
+        self.allData = [responseObject objectForKey:@"videoGalleries"];
+        [self setTVListingsData:0];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
-        // 4
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather"
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving TV Listings"
                                                             message:[error localizedDescription]
                                                            delegate:nil
                                                   cancelButtonTitle:@"Ok"
                                                   otherButtonTitles:nil];
         [alertView show];
     }];
-    
-    // 5
     [operation start];
+}
+
+-(void)setTVListingsData:(int)index {
+    self.tvListings = [self.allData[index] objectForKey:@"items"];
+    NSString *dateForListings = [self.allData[index] valueForKeyPath:@"header.name"];
+    self.title = [NSString stringWithFormat:@"TV Listings from %@", dateForListings];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)];
-    self.navigationItem.rightBarButtonItem = addButton;
     self.detailViewController = (DetailViewController *)[[self.splitViewController.viewControllers lastObject] topViewController];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void)insertNewObject:(id)sender {
-    if (!self.tvListings) {
-        self.tvListings = [[NSMutableArray alloc] init];
-    }
-    [self.tvListings insertObject:[NSDate date] atIndex:0];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 #pragma mark - Segues
@@ -99,25 +88,38 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    TVSummaryCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
     NSDate *object = self.tvListings[indexPath.row];
-    cell.textLabel.text = [object valueForKey:@"videoName"];
+    cell.name.text = [object valueForKey:@"videoName"];
+    [cell.thumb setImageWithURL:[NSURL URLWithString:[object valueForKeyPath:@"entityThumbnailUrl"]]];
+    [cell.brand setImageWithURL:[NSURL URLWithString:[object valueForKeyPath:@"networkLogoUrl"]]];
+    [cell.brand setAccessibilityLabel:[object valueForKeyPath:@"videoBrand"]];
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+    return NO;
 }
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self.tvListings removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+- (IBAction)clickedListing:(UIButton *)sender {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"What day would you like to view?" preferredStyle:UIAlertControllerStyleAlert];
+    
+    __weak MasterViewController *wself = self;
+    
+    //used just in case the API ever returns more than two days
+    for (int i = 0; i < self.allData.count; i++) {
+        [alert addAction:[UIAlertAction actionWithTitle:[self.allData[i] valueForKeyPath:@"header.name"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [wself setTVListingsData:i];
+        }]];
     }
+    
+    // Add actions to the controller so they will appear
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
+    
+    // Finally present the action
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D1EC8871-7B55-4CBD-B1CA-A4603A8F414E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>TvTest</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>D46782490ED81751991338082230CD0F7590B0CF</key>
+		<string>https://github.com/tobyglenn/comcastTvViewer</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>TvTest.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>D46782490ED81751991338082230CD0F7590B0CF</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/tobyglenn/comcastTvViewer</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>D46782490ED81751991338082230CD0F7590B0CF</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>D46782490ED81751991338082230CD0F7590B0CF</string>
+			<key>IDESourceControlWCCName</key>
+			<string>TvTest</string>
+		</dict>
+	</array>
+</dict>
+</plist>

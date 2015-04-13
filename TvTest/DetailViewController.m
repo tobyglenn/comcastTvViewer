@@ -7,9 +7,12 @@
 //
 
 #import "DetailViewController.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
 
 @interface DetailViewController ()
-
+@property (weak, nonatomic) IBOutlet UIImageView *videoImage;
+@property (weak, nonatomic) IBOutlet UILabel *detailDescriptionLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *brandLogo;
 @end
 
 @implementation DetailViewController
@@ -28,7 +31,9 @@
 - (void)configureView {
     // Update the user interface for the detail item.
     if (self.detailItem) {
-        self.detailDescriptionLabel.text = [self.detailItem description];
+        self.detailDescriptionLabel.text = [self.detailItem valueForKey:@"videoDescription"];
+        [self.videoImage setImageWithURL:[NSURL URLWithString:[self.detailItem valueForKeyPath:@"image.src"]]];
+        //[self.brandLogo setI
     }
 }
 

@@ -8,10 +8,10 @@
 
 #import "MasterViewController.h"
 #import "DetailViewController.h"
+#import <AFNetworking/AFHTTPRequestOperation.h>
 
 @interface MasterViewController ()
-
-@property NSMutableArray *objects;
+@property NSMutableArray *tvListings;
 @end
 
 @implementation MasterViewController
@@ -22,6 +22,33 @@
         self.clearsSelectionOnViewWillAppear = NO;
         self.preferredContentSize = CGSizeMake(320.0, 600.0);
     }
+    NSURL *url = [NSURL URLWithString:@"http://xfinitytv.comcast.net/api/xfinity/ipad/home/videos?filter&type=json"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    // 2
+    AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
+    operation.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        // 3
+        self.tvListings = [[responseObject objectForKey:@"videoGalleries"][0] objectForKey:@"items"];
+        self.title = @"TV Listings";
+        [self.tableView reloadData];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+        // 4
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather"
+                                                            message:[error localizedDescription]
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+    }];
+    
+    // 5
+    [operation start];
 }
 
 - (void)viewDidLoad {
@@ -40,10 +67,10 @@
 }
 
 - (void)insertNewObject:(id)sender {
-    if (!self.objects) {
-        self.objects = [[NSMutableArray alloc] init];
+    if (!self.tvListings) {
+        self.tvListings = [[NSMutableArray alloc] init];
     }
-    [self.objects insertObject:[NSDate date] atIndex:0];
+    [self.tvListings insertObject:[NSDate date] atIndex:0];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
@@ -53,9 +80,9 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"showDetail"]) {
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSDate *object = self.objects[indexPath.row];
+        NSDate *tvListing = self.tvListings[indexPath.row];
         DetailViewController *controller = (DetailViewController *)[[segue destinationViewController] topViewController];
-        [controller setDetailItem:object];
+        [controller setDetailItem:tvListing];
         controller.navigationItem.leftBarButtonItem = self.splitViewController.displayModeButtonItem;
         controller.navigationItem.leftItemsSupplementBackButton = YES;
     }
@@ -68,14 +95,14 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.objects.count;
+    return self.tvListings.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
 
-    NSDate *object = self.objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    NSDate *object = self.tvListings[indexPath.row];
+    cell.textLabel.text = [object valueForKey:@"videoName"];
     return cell;
 }
 
@@ -86,7 +113,7 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [self.objects removeObjectAtIndex:indexPath.row];
+        [self.tvListings removeObjectAtIndex:indexPath.row];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     } else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.

@@ -10,6 +10,7 @@
 		587F059F3F0908CE8BD7F434 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDA2E5A047E7DE328AFD136 /* libPods.a */; };
 		E50F7C181ADC4E58007AC642 /* TVSummaryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E50F7C171ADC4E58007AC642 /* TVSummaryCell.m */; };
 		E50F7C1B1ADC6D08007AC642 /* TVListing.m in Sources */ = {isa = PBXBuildFile; fileRef = E50F7C1A1ADC6D08007AC642 /* TVListing.m */; };
+		E50F7C1D1ADC8BF9007AC642 /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = E50F7C1C1ADC8BF9007AC642 /* data.json */; };
 		E58ADD7C1ADC1CB1007D5BF4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E58ADD7B1ADC1CB1007D5BF4 /* main.m */; };
 		E58ADD7F1ADC1CB1007D5BF4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E58ADD7E1ADC1CB1007D5BF4 /* AppDelegate.m */; };
 		E58ADD821ADC1CB1007D5BF4 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E58ADD811ADC1CB1007D5BF4 /* MasterViewController.m */; };
@@ -38,6 +39,7 @@
 		E50F7C171ADC4E58007AC642 /* TVSummaryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TVSummaryCell.m; sourceTree = "<group>"; };
 		E50F7C191ADC6D08007AC642 /* TVListing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TVListing.h; path = TvTest/TVListing.h; sourceTree = SOURCE_ROOT; };
 		E50F7C1A1ADC6D08007AC642 /* TVListing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TVListing.m; path = TvTest/TVListing.m; sourceTree = SOURCE_ROOT; };
+		E50F7C1C1ADC8BF9007AC642 /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
 		E58ADD761ADC1CB1007D5BF4 /* TvTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TvTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E58ADD7A1ADC1CB1007D5BF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E58ADD7B1ADC1CB1007D5BF4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 		E58ADD961ADC1CB1007D5BF4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				E50F7C1C1ADC8BF9007AC642 /* data.json */,
 				E58ADD971ADC1CB1007D5BF4 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -250,6 +253,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E50F7C1D1ADC8BF9007AC642 /* data.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

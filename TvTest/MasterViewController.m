@@ -103,6 +103,13 @@
     return NO;
 }
 - (IBAction)clickedListing:(UIButton *)sender {
+    UIAlertController *alert = [self createAlert];
+    
+    // Finally present the action
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+-(UIAlertController *)createAlert {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"What day would you like to view?" preferredStyle:UIAlertControllerStyleAlert];
     
     __weak MasterViewController *wself = self;
@@ -115,11 +122,9 @@
     }
     
     // Add actions to the controller so they will appear
-    
     [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil]];
-    
-    // Finally present the action
-    [self presentViewController:alert animated:YES completion:nil];
+
+    return alert;
 }
 
 @end

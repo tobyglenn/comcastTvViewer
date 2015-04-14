@@ -16,6 +16,12 @@
 
 @end
 
+@interface MasterViewController (Testing)
+@property NSMutableArray *allData;
+@property NSMutableArray *tvListings;
+-(UIAlertController *)createAlert;
+@end
+
 @implementation TvTestTests
 
 - (void)setUp {
@@ -23,6 +29,11 @@
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     self.vc = [storyboard instantiateViewControllerWithIdentifier:@"MasterViewController"];
     [self.vc performSelectorOnMainThread:@selector(loadView) withObject:nil waitUntilDone:YES];
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data" ofType:@"json"];
+    NSError *error = nil;
+    NSData *JSONData = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&error];
+    NSDictionary * parsedData = [NSJSONSerialization JSONObjectWithData:JSONData options:kNilOptions error:&error];
+    self.vc.allData = [parsedData objectForKey:@"videoGalleries"];
 }
 
 - (void)tearDown {
@@ -38,6 +49,24 @@
 -(void)testThatTableViewLoads
 {
     XCTAssertNotNil(self.vc.tableView, @"TableView not initiated");
+}
+
+-(void)testThatDataIsThere
+{
+    XCTAssertNotNil(self.vc.allData, @"Data must be there from filesystem data file");
+}
+
+-(void)testAlert
+{
+    UIAlertController *alert = [self.vc createAlert];
+    NSArray *actionsFromComponent = alert.actions;
+    XCTAssertNotNil(actionsFromComponent, @"UIAlertController should have actions");
+    UIAlertAction *first = actionsFromComponent[0];
+    XCTAssertEqualObjects(@"Sun Night TV", first.title);
+    UIAlertAction *second = actionsFromComponent[1];
+    XCTAssertEqualObjects(@"Fri Night TV", second.title);
+    UIAlertAction *cancel = actionsFromComponent[2];
+    XCTAssertEqualObjects(@"Cancel", cancel.title);
 }
 
 

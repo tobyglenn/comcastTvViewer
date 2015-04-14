@@ -32,7 +32,8 @@
     // Update the user interface for the detail item.
     if (self.detailItem) {
         self.detailDescriptionLabel.text = [self.detailItem valueForKey:@"videoDescription"];
-        [self.videoImage setImageWithURL:[NSURL URLWithString:[self.detailItem valueForKeyPath:@"image.src"]]];
+        [self.videoImage setImageWithURL:[NSURL URLWithString:[self.detailItem valueForKeyPath:@"entityPosterArtUrl"]]];
+        self.videoImage.contentMode = UIViewContentModeScaleAspectFit;
         [self.videoImage setAccessibilityLabel:[self.detailItem valueForKeyPath:@"image.alt"]];
     }else {
         self.detailDescriptionLabel.text = @"please select a listing to view the full content";
